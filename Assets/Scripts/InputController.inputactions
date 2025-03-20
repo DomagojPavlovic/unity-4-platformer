@@ -1,0 +1,34 @@
+{
+    "name": "InputController",
+    "maps": [
+        {
+            "name": "Play",
+            "id": "0af50f8c-af27-4d5d-ac65-e0f55e9752e0",
+            "actions": [
+                {
+                    "name": "LeftStickMovement",
+                    "type": "PassThrough",
+                    "id": "e7f05a97-2798-4c01-92af-7407ae3a543e",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "5ccf9ea2-53ce-4138-9204-8543b1b4a8e2",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftStickMovement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
