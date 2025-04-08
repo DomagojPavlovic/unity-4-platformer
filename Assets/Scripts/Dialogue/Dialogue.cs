@@ -42,6 +42,8 @@ public class Dialogue : MonoBehaviour
 
     private bool inRadius;
 
+    private bool initiallyEnteredRadius;
+
     private int currentDialogueIndex;
 
     private ResponseWindow firstInteractionWindow;
@@ -86,37 +88,56 @@ public class Dialogue : MonoBehaviour
         {
             currentDialogueIndex = NOT_IN_DIALOGUE_INDEX;
             FullClearAll();
+            initiallyEnteredRadius = false;
             return;
+        } else if(!initiallyEnteredRadius)
+        {
+            Draw();
+            initiallyEnteredRadius = true;
         }
 
-        SingleDialogueWindow currentDialogueWindow;
-
-        if (currentDialogueIndex == NOT_IN_DIALOGUE_INDEX)
-        {
-            currentDialogueWindow = firstInteractionWindow;
-        } else
-        {
-            currentDialogueWindow = baseText.GetDialogs()[currentDialogueIndex];
-        }
-
-
-        if(currentDialogueWindow.GetType() == typeof(MultiChoiceWindow))
-        {
-            DrawMultiChoiceWindow((MultiChoiceWindow)currentDialogueWindow);
-        } else
-        {
-            DrawResponseWindow((ResponseWindow)currentDialogueWindow);
-        }
-
-        List<Transition> transitions = currentDialogueWindow.GetTransitions();
+        List<Transition> transitions = GetCurrentDialogueWindow().GetTransitions();
         foreach (Transition transition in transitions)
         {
             if(KeyEnumMethods.GetKeyPressed(transition.GetKeyEnum())) {
-                currentDialogueIndex = transition.GetGoTo();
+                ChangeCurrentDialogueIndex(transition.GetGoTo());
                 return;
             }
         }
         
+    }
+
+    private void ChangeCurrentDialogueIndex(int newIndex)
+    {
+        currentDialogueIndex = newIndex;
+        Draw();
+    }
+
+    private SingleDialogueWindow GetCurrentDialogueWindow()
+    {
+        if (currentDialogueIndex == NOT_IN_DIALOGUE_INDEX)
+        {
+            return firstInteractionWindow;
+        }
+        else
+        {
+            return baseText.GetDialogs()[currentDialogueIndex];
+        }
+    }
+
+
+    private void Draw()
+    {
+        SingleDialogueWindow currentDialogueWindow = GetCurrentDialogueWindow();
+
+        if (currentDialogueWindow.GetType() == typeof(MultiChoiceWindow))
+        {
+            DrawMultiChoiceWindow((MultiChoiceWindow)currentDialogueWindow);
+        }
+        else
+        {
+            DrawResponseWindow((ResponseWindow)currentDialogueWindow);
+        }
     }
 
 
@@ -165,6 +186,10 @@ public class Dialogue : MonoBehaviour
         panel.SetActive(enable);
         panel.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = key;
         panel.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
+        if(text != "")
+        {
+            FadePanelIn(panel);
+        }
     }
 
     //lowest level
@@ -172,6 +197,15 @@ public class Dialogue : MonoBehaviour
     {
         secondPanelTop.SetActive(enable);
         secondPanelTop.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = text;
+        if (text != "")
+        {
+            FadePanelIn(secondPanelTop);
+        }  
+    }
+
+    private void FadePanelIn(GameObject panel)
+    {
+        UIManager.instance.FadeIn(panel);
     }
 
 }

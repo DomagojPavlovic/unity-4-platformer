@@ -9,6 +9,10 @@ public class UIManager : Manager<UIManager>
     [SerializeField]
     private GameObject notificationPanel;
 
+    private readonly List<GameObject> list = new();
+
+    private static readonly float FADE_IN_TIME_SECONDS = 0.3f;
+
     private void Start()
     {
         notificationPanel.SetActive(false);
@@ -34,5 +38,22 @@ public class UIManager : Manager<UIManager>
         yield return new WaitForSeconds(duration);
 
         panel.SetActive(false);
+    }
+
+    public void FadeIn(GameObject gameObject)
+    {
+        list.Add(gameObject);
+        gameObject.GetComponent<CanvasGroup>().alpha = 0;
+    }
+
+    private void Update()
+    {
+        foreach (GameObject go in list) {
+            print("before: " + go.GetComponent<CanvasGroup>().alpha);
+            go.GetComponent<CanvasGroup>().alpha += (Time.deltaTime / FADE_IN_TIME_SECONDS);
+            print("after: " + go.GetComponent<CanvasGroup>().alpha);
+
+        }
+        list.RemoveAll(x => x.GetComponent<CanvasGroup>().alpha >= 1);
     }
 }
