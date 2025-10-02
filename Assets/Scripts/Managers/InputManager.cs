@@ -5,9 +5,6 @@ using UnityEngine.UI;
 
 public class InputManager : Manager<InputManager>
 {
-    //debug
-
-
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Delete))

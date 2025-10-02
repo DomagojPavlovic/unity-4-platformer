@@ -15,6 +15,5 @@ public class ProjectileLifetime : MonoBehaviour
     public void DestroyProjectile()
     {
         Destroy(gameObject);
-        // play animation?
     }
 }
